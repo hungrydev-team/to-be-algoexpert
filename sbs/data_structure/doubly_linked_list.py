@@ -1,6 +1,7 @@
 from typing import Optional, Tuple
 
-from data_structure.structure_interface import DoublyLinkedListInterface
+from sbs.data_structure.exception import OutOfIndex, NoSuchElementException
+from sbs.data_structure.structure_interface import DoublyLinkedListInterface
 
 
 class Node:
@@ -38,15 +39,19 @@ class DoublyLinkedList(DoublyLinkedListInterface):
         return
 
     def remove_first(self) -> Node:
-        # TODO self.tail에 관한 코드가 없다.
-        if self.head is None:
-            raise ModuleNotFoundError()
-        first_node = self.head
-        self.head = self.head.next
-        if self.head is not None:
-            self.head.prev = None
+        if self.size == 0:
+            raise NoSuchElementException()
+        elif self.size == 1:
+            node = self.head
+            self.head = None
+            self.tail = None
+        else:
+            node = self.head
+            self.head = node.next
+            node.next.prev = None
+            node.next = None
         self.size -= 1
-        return first_node
+        return node
 
     # remove(index -> int) 메서드에서 index에 마지막 값을 전달하면 되는거 아닌가??
     def remove_last(self) -> None:
@@ -71,7 +76,7 @@ class DoublyLinkedList(DoublyLinkedListInterface):
             return
 
     def search_index(self, index):
-        if index > self.size:
+        if self.size < index or index < 0:
             raise NoSuchElementException()
         if index < (self.size / 2):
             cursor = self.head
@@ -85,22 +90,25 @@ class DoublyLinkedList(DoublyLinkedListInterface):
             return cursor
 
     def insert(self, index, node):
-        if index == 0:
+        if index < 0 or index > self.size:
+            raise OutOfIndex()
+        elif index == 0:
             self.add_first(node)
+        elif index == self.size:
+            self.add_last(node)
         else:
-            temp1 = self.search_index(index - 1)
-            temp2 = temp1.next
-            temp1.next = node
-            node.next = temp2
-            if temp2 is not None:
-                temp2.prev = node
-            node.prev = temp1
+            found_node = self.search_index(index)
+            prev_node = found_node.prev
+            prev_node.next = node
+            found_node.prev = node
+            node.prev = prev_node
+            node.next = found_node
             self.size += 1
-            if node.next is None:
-                self.tail = node
 
     def remove(self, index) -> Node:
-        if index == 0:
+        if index < 0 or self.size < index:
+            raise OutOfIndex("out of index")
+        elif index == 0:
             return self.remove_first()
         else:
             temp = self.search_index(index - 1)
@@ -134,7 +142,5 @@ doubly_linked_list.add_first(Node(4))
 doubly_linked_list.display()
 # a = doubly_linked_list.search_index(3)
 # doubly_linked_list.display()
-doubly_linked_list.insert(4, Node(100))
-doubly_linked_list.display()
-doubly_linked_list.remove(1)
+doubly_linked_list.insert(1, Node(100))
 doubly_linked_list.display()
