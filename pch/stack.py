@@ -5,6 +5,10 @@ class NoSuchElementException(Exception):
     pass
 
 
+class WrongIndex(Exception):
+    pass
+
+
 class Node:
     def __init__(self, val):
         self.val = val
@@ -45,31 +49,31 @@ class Stack(StackInterface):
         self.size = 0
 
     def push(self, node: Node) -> None:
-        self.size += 1
         if self.last is None:
             self.last = node
-            return
-        node.prev = self.last
-        self.last = node
+        else:
+            node.prev = self.last
+            self.last = node
+        self.size += 1
         return
 
     def pop(self) -> Node:
         if self.last is None:
             raise NoSuchElementException()
-        self.size -= 1
         if self.last.prev is None:
             node = self.last
             self.last = None
-            return node
-        node = self.last
-        self.last = self.last.prev
-        node.prev = None
+        else:
+            node = self.last
+            self.last = self.last.prev
+            node.prev = None
+        self.size -= 1
         return node
 
     def search(self, index) -> Node:
-        if index > self.size:
-            raise NoSuchElementException()
-        start_index = 1
+        if index < 0 or index > self.size - 1:
+            raise WrongIndex()
+        start_index = 0
         node = self.last
         while start_index != index:
             start_index += 1
@@ -104,7 +108,7 @@ stack.push(Node(4))
 print(stack.pop())
 print(stack.pop())
 
-print(stack.search(2))
+print(stack.search(1))
 
 print(stack.peek())
 
