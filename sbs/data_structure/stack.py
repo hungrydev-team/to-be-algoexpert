@@ -1,6 +1,10 @@
 from abc import abstractmethod
 
-from data_structure.node import Node
+from sbs.data_structure.node import Node
+
+
+class NoSuchElementException:
+    pass
 
 
 class StackInterface:
@@ -29,30 +33,39 @@ class MyStack(StackInterface):
     # LIFO
     def __init__(self):
         self.top = None
+        self.size = 0
 
     def search(self, index) -> Node:
-        pass
+        if index < 0 or self.size < index:
+            raise NoSuchElementException("index 밖입니다.")
+        else:
+            cursor = self.top
+            for i in range(index):
+                cursor = cursor.next
+            return cursor
 
     def pop(self):
         # 스택에서 가장 위에 있는 항목을 제거한다.
         if self.top is None:
             return
         self.top = self.top.next
+        self.size -= 1
 
-    def push(self, item):
+    def push(self, node):
         # item 하나를 스택의 가장 윗 부분에 추가한다.
-        new_node = Node(item)
         if self.top is None:
-            self.top = new_node
+            self.top = node
+            self.size += 1
         else:
-            new_node.next = self.top
-            self.top = new_node
+            node.next = self.top
+            self.top = node
+            self.size += 1
 
     def peek(self):
         # 스택의 가장 위에 잇는 항목을 반환한다.
-        if self.top is not None:
-            return self.top.data
-        return None
+        if self.top is None:
+            return NoSuchElementException()
+        return self.top.data
 
     def is_empty(self):
         # 스택이 비어 있을 때에 true를 반환한다.
@@ -69,8 +82,11 @@ class MyStack(StackInterface):
 
 
 stack = MyStack()
-stack.push(1)
-stack.push(2)
-stack.push(3)
-stack.push(4)
+stack.push(Node(1))
+stack.push(Node(2))
+stack.push(Node(3))
+stack.push(Node(4))
+stack.print_stack()
+a = stack.search(0)
+stack.pop()
 stack.print_stack()

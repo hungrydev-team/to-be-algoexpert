@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-from data_structure.node import Node
 
 
 class DoublyLinkedListInterface(ABC):
