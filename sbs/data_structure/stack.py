@@ -1,32 +1,6 @@
-from abc import abstractmethod
-
+from sbs.data_structure.exception import NoSuchElementException
 from sbs.data_structure.node import Node
-
-
-class NoSuchElementException:
-    pass
-
-
-class StackInterface:
-    @abstractmethod
-    def push(self, node: Node) -> None:
-        pass
-
-    @abstractmethod
-    def pop(self) -> Node:
-        pass
-
-    @abstractmethod
-    def search(self, index) -> Node:
-        pass
-
-    @abstractmethod
-    def peek(self) -> Node:
-        pass
-
-    @abstractmethod
-    def __str__(self):
-        pass
+from sbs.data_structure.structure_interface import StackInterface
 
 
 class MyStack(StackInterface):

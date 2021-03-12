@@ -1,5 +1,6 @@
-from abc import abstractmethod
 from typing import Optional
+
+from sbs.data_structure.exception import OutOfIndex
 
 
 class Node:
@@ -7,28 +8,6 @@ class Node:
         self.data = data
         self.next = None
         self.prev = None
-
-
-class NoSuchElementException:
-    pass
-
-
-class QueueInterface:
-    @abstractmethod
-    def enqueue(self, node: Node) -> None:
-        pass
-
-    @abstractmethod
-    def dequeue(self) -> Node:
-        pass
-
-    @abstractmethod
-    def search(self, index) -> Node:
-        pass
-
-    @abstractmethod
-    def __str__(self):
-        pass
 
 
 class MyQueue:
@@ -71,7 +50,7 @@ class MyQueue:
 
     def search(self, index):
         if index < 0 or self.size < index:
-            raise NoSuchElementException()
+            raise OutOfIndex("out of index")
         else:
             cursor = self.tail
             for i in range(index):

@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from sbs.data_structure.node import Node
 
 
 class DoublyLinkedListInterface(ABC):
@@ -29,4 +30,44 @@ class DoublyLinkedListInterface(ABC):
 
     @abstractmethod
     def remove(self, index):
+        pass
+
+
+class QueueInterface:
+    @abstractmethod
+    def enqueue(self, node: Node) -> None:
+        pass
+
+    @abstractmethod
+    def dequeue(self) -> Node:
+        pass
+
+    @abstractmethod
+    def search(self, index) -> Node:
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+
+class StackInterface:
+    @abstractmethod
+    def push(self, node: Node) -> None:
+        pass
+
+    @abstractmethod
+    def pop(self) -> Node:
+        pass
+
+    @abstractmethod
+    def search(self, index) -> Node:
+        pass
+
+    @abstractmethod
+    def peek(self) -> Node:
+        pass
+
+    @abstractmethod
+    def __str__(self):
         pass
