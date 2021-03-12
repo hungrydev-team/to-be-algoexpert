@@ -36,6 +36,10 @@ class NoSuchElementException(Exception):
     pass
 
 
+class WrongIndex(Exception):
+    pass
+
+
 class Queue(QueueInterface):
     def __init__(self):
         self.first = None
@@ -43,35 +47,35 @@ class Queue(QueueInterface):
         self.size = 0
 
     def enqueue(self, node: Node) -> None:
-        self.size += 1
         if self.first is None:
             self.first = node
             self.last = node
-            return
-        self.last.next = node
-        node.prev = self.last
-        self.last = node
+        else:
+            self.last.next = node
+            node.prev = self.last
+            self.last = node
+        self.size += 1
         return
 
     def dequeue(self) -> Node:
         if self.first is None:
             raise NoSuchElementException()
-        self.size -= 1
         if self.first.next is None:
             node = self.first
             self.first = None
             self.last = None
-            return node
-        node = self.first
-        self.first = self.first.next
-        self.first.prev = None
-        node.next = None
+        else:
+            node = self.first
+            self.first = self.first.next
+            self.first.prev = None
+            node.next = None
+        self.size -= 1
         return node
 
     def search(self, index) -> Node:
-        if index > self.size:
-            raise NoSuchElementException()
-        start_index = 1
+        if index < 0 or index > self.size - 1:
+            raise WrongIndex()
+        start_index = 0
         node = self.first
         while start_index != index:
             start_index += 1
@@ -107,6 +111,6 @@ print(queue.dequeue())
 
 print(queue.peek())
 
-print(queue.search(2))
+print(queue.search(0))
 
 print(queue)
