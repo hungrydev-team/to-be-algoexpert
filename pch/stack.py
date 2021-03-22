@@ -60,9 +60,6 @@ class Stack(StackInterface):
     def pop(self) -> Node:
         if self.size == 0:
             raise NoSuchElementException()
-        elif self.size == 1:
-            node = self.top
-            self.top = None
         else:
             node = self.top
             self.top = self.top.prev
