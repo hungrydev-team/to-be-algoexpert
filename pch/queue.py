@@ -47,7 +47,7 @@ class Queue(QueueInterface):
         self.size = 0
 
     def enqueue(self, node: Node) -> None:
-        if self.first is None:
+        if self.size == 0:
             self.first = node
             self.last = node
         else:
@@ -58,9 +58,9 @@ class Queue(QueueInterface):
         return
 
     def dequeue(self) -> Node:
-        if self.first is None:
+        if self.size == 0:
             raise NoSuchElementException()
-        if self.first.next is None:
+        elif self.size == 1:
             node = self.first
             self.first = None
             self.last = None
@@ -75,22 +75,20 @@ class Queue(QueueInterface):
     def search(self, index) -> Node:
         if index < 0 or index > self.size - 1:
             raise WrongIndex()
-        start_index = 0
         node = self.first
-        while start_index != index:
-            start_index += 1
+        for i in range(index):
             node = node.next
         return node
 
     def peek(self) -> Node:
-        if self.first is None:
+        if self.size == 0:
             raise NoSuchElementException()
         return self.first
 
     def __str__(self):
         node = self.first
         result = "None "
-        while node is not None:
+        for i in range(self.size):
             result += "<- "
             result += str(node.val)
             result += " -> "
