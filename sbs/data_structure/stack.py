@@ -27,7 +27,7 @@ class MyStack(StackInterface):
 
     def push(self, node):
         # item 하나를 스택의 가장 윗 부분에 추가한다.
-        if self.top is None:
+        if self.is_empty():
             self.top = node
             self.size += 1
         else:
@@ -37,15 +37,13 @@ class MyStack(StackInterface):
 
     def peek(self):
         # 스택의 가장 위에 잇는 항목을 반환한다.
-        if self.top is None:
+        if self.is_empty():
             return NoSuchElementException()
         return self.top.data
 
     def is_empty(self):
         # 스택이 비어 있을 때에 true를 반환한다.
-        if self.top is None:
-            return True
-        return False
+        return self.size == 0
 
     def print_stack(self):
         temp = self.top

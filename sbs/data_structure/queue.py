@@ -18,35 +18,33 @@ class MyQueue:
         self.size = 0
 
     def is_empty(self):
-        return self.head is None
+        return self.size == 0
 
     def enqueue(self, node) -> None:
-        self.size += 1
-        if self.head is None:
+        if self.is_empty():
             self.head = node
             self.tail = node
-            return
         else:
             self.tail.prev = node
             node.next = self.tail
             self.tail = node
-            return
+        self.size += 1
+        return
 
     def dequeue(self) -> Optional[Node]:
         if self.is_empty():
             return
-        if self.size == 1:
+        elif self.size == 1:
             node = self.tail
             self.tail = None
             self.head = None
-            self.size -= 1
-            return node
         else:
             node = self.head
             self.head = node.prev
             node.prev.next = None
             self.size -= 1
-            return node
+        self.size -= 1
+        return node
 
     def search(self, index):
         if index < 0 or self.size < index:
