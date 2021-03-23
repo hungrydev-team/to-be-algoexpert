@@ -1,7 +1,7 @@
-from data_structure.node import Node
+from sbs.data_structure.node import Node
 
 
-class LinkedList():
+class LinkedList:
     def __init__(self):
         self.head = None
 
