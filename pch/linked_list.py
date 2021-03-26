@@ -54,7 +54,7 @@ class LinkedList(LinkedListInterface):
         self.size = 0
 
     def add_last(self, node: Node) -> None:
-        if self.head is None:
+        if self.size == 0:
             self.head = node
         else:
             cursor = self.head
@@ -66,10 +66,10 @@ class LinkedList(LinkedListInterface):
 
     def remove_last(self) -> Node:
         # 헤드에 노드가 없는 경우
-        if self.head is None:
+        if self.size == 0:
             raise NoSuchElementException()
         # 헤드에만 노드가 있는 경우
-        elif self.head.next is None:
+        elif self.size == 1:
             last_node = self.head
             self.head = None
         else:
@@ -82,7 +82,7 @@ class LinkedList(LinkedListInterface):
         return last_node
 
     def remove_first(self) -> Node:
-        if self.head is None:
+        if self.size == 0:
             return NoSuchElementException()
         node = self.head
         self.head = self.head.next
