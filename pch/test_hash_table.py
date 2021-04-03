@@ -19,8 +19,10 @@ def test_remove(table: HashTable):
         table.lookup(1)
 
 
-def test_insert_multiple(table: HashTable):
-    table.insert(1, 2)
-    assert table.lookup(1) == 2
-    table.insert(1, 3)
-    assert table.lookup(1) == 3
+# def test_insert_multiple(table: HashTable):
+#     table.insert(1, 2)
+#     assert table.lookup(1) == 2
+#     table.insert(1, 3)
+#     assert table.lookup(1) == 3
+def test_insert():
+    assert False

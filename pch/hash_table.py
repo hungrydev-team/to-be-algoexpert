@@ -160,7 +160,7 @@ class LinkedList(LinkedListInterface):
 
     def search_by_key(self, key) -> Node or None:
         node = self.head
-        while node is not None:
+        for i in range(self.size - 1):
             if node.key == key:
                 return node
             node = node.next
@@ -175,13 +175,12 @@ class LinkedList(LinkedListInterface):
         elif node.next is None:
             return self.remove_last()
         else:
-            prev_node = self.head
+            cursor = self.head
             for i in range(self.size - 2):
-                if prev_node.next is node:
+                if cursor.next is node:
                     break
-                else:
-                    prev_node = prev_node.next
-            prev_node.next = node.next
+                cursor = cursor.next
+            cursor.next = node.next
             node.next = None
             return node
 
@@ -200,29 +199,30 @@ class LinkedList(LinkedListInterface):
 
 
 class HashTable(HashTableInterface):
-    def __init__(self) -> None:
-        self.size = 1000
-        self.array = [LinkedList()] * self.size
+    def __init__(self, capacity: int = 1000) -> None:
+        self.capacity = capacity
+        self.array = [LinkedList()] * self.capacity
 
-    def hash(self, val):
-        index = val % self.size
+    def _hash(self, val: int) -> int:
+        index = val % self.capacity
         return index
 
     def insert(self, key: int, value: int) -> None:
-        index = self.hash(key)
-        linked_list = self.array[index]
-        node = Node(key, value)
-        linked_list.add_last(node)
+        linked_list = self.get_linked_list_by_key(key)
+        linked_list.add_last(Node(key, value))
         return
 
     def remove(self, key: int) -> None:
-        index = self.hash(key)
-        linked_list = self.array[index]
+        linked_list = self.get_linked_list_by_key(key)
         return linked_list.remove_by_key(key)
 
-    def lookup(self, key: int) -> int or None:
-        index = self.hash(key)
+    def get_linked_list_by_key(self, key):
+        index = self._hash(key)
         linked_list = self.array[index]
+        return linked_list
+
+    def lookup(self, key: int) -> int or None:
+        linked_list = self.get_linked_list_by_key(key)
         return linked_list.search_by_key(key).val
 
 
@@ -230,7 +230,7 @@ hash_table = HashTable()
 
 hash_table.insert(11, 26)
 hash_table.insert(4, 16)
-print(hash_table.lookup(11))
-print(hash_table.lookup(4))
-print(hash_table.remove(4))
-print(hash_table.lookup(4))
+# print(hash_table.lookup(11))
+# print(hash_table.lookup(4))
+# print(hash_table.remove(4))
+# print(hash_table.lookup(4))
