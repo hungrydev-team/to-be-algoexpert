@@ -5,33 +5,17 @@ class WrongIndex(Exception):
     pass
 
 
-class NoSuchKeyException(Exception):
-    pass
-
-
 class NoSuchElementException(Exception):
     pass
 
 
 class Node:
-    def __init__(self, key, val):
-        self.key = key
+    def __init__(self, val):
         self.val = val
         self.next = None
 
-
-class HashTableInterface:
-    @abstractmethod
-    def insert(self, key: int, value: int) -> None:
-        pass
-
-    @abstractmethod
-    def remove(self, key: int) -> None:
-        pass
-
-    @abstractmethod
-    def lookup(self, key: int) -> int:
-        pass
+    def __str__(self):
+        return f"{ {self.val} }"
 
 
 class LinkedListInterface:
@@ -63,14 +47,6 @@ class LinkedListInterface:
     def remove(self, index) -> Node:
         pass
 
-    @abstractmethod
-    def search_by_key(self, key) -> Node or None:
-        pass
-
-    @abstractmethod
-    def remove_by_key(self, key) -> Node or None:
-        pass
-
 
 class LinkedList(LinkedListInterface):
     def __init__(self):
@@ -78,7 +54,7 @@ class LinkedList(LinkedListInterface):
         self.size = 0
 
     def add_last(self, node: Node) -> None:
-        if self.head is None:
+        if self.size == 0:
             self.head = node
         else:
             cursor = self.head
@@ -90,10 +66,10 @@ class LinkedList(LinkedListInterface):
 
     def remove_last(self) -> Node:
         # 헤드에 노드가 없는 경우
-        if self.head is None:
+        if self.size == 0:
             raise NoSuchElementException()
         # 헤드에만 노드가 있는 경우
-        elif self.head.next is None:
+        elif self.size == 1:
             last_node = self.head
             self.head = None
         else:
@@ -106,7 +82,7 @@ class LinkedList(LinkedListInterface):
         return last_node
 
     def remove_first(self) -> Node:
-        if self.head is None:
+        if self.size == 0:
             return NoSuchElementException()
         node = self.head
         self.head = self.head.next
@@ -158,32 +134,6 @@ class LinkedList(LinkedListInterface):
             self.size += 1
             return
 
-    def search_by_key(self, key) -> Node or None:
-        node = self.head
-        for i in range(self.size - 1):
-            if node.key == key:
-                return node
-            node = node.next
-        return
-
-    def remove_by_key(self, key) -> Node or None:
-        node = self.search_by_key(key)
-        if node is None:
-            return
-        elif node is self.head:
-            return self.remove_first()
-        elif node.next is None:
-            return self.remove_last()
-        else:
-            cursor = self.head
-            for i in range(self.size - 2):
-                if cursor.next is node:
-                    break
-                cursor = cursor.next
-            cursor.next = node.next
-            node.next = None
-            return node
-
     def __str__(self):
         current_node = self.head
         if current_node is None:
@@ -198,39 +148,23 @@ class LinkedList(LinkedListInterface):
         return output
 
 
-class HashTable(HashTableInterface):
-    def __init__(self, capacity: int = 1000) -> None:
-        self.capacity = capacity
-        self.array = [LinkedList()] * self.capacity
+linked_list = LinkedList()
 
-    def _hash(self, val: int) -> int:
-        index = val % self.capacity
-        return index
+linked_list.add_first(Node(1))
+linked_list.add_first(Node(2))
+linked_list.add_first(Node(3))
 
-    def insert(self, key: int, value: int) -> None:
-        linked_list = self.get_linked_list_by_key(key)
-        linked_list.add_last(Node(key, value))
-        return
+linked_list.add_last(Node(4))
+linked_list.insert(3, Node(5))
+linked_list.insert(0, Node(6))
+linked_list.insert(6, Node(7))
 
-    def remove(self, key: int) -> None:
-        linked_list = self.get_linked_list_by_key(key)
-        return linked_list.remove_by_key(key)
+print(linked_list.search(4))
 
-    def get_linked_list_by_key(self, key):
-        index = self._hash(key)
-        linked_list = self.array[index]
-        return linked_list
+linked_list.remove_first()
+linked_list.remove_last()
+linked_list.remove(2)
+linked_list.remove(0)
+linked_list.remove(2)
 
-    def lookup(self, key: int) -> int or None:
-        linked_list = self.get_linked_list_by_key(key)
-        return linked_list.search_by_key(key).val
-
-
-hash_table = HashTable()
-
-hash_table.insert(11, 26)
-hash_table.insert(4, 16)
-# print(hash_table.lookup(11))
-# print(hash_table.lookup(4))
-# print(hash_table.remove(4))
-# print(hash_table.lookup(4))
+print(linked_list)
